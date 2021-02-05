@@ -1,0 +1,25 @@
+{
+    "name": "fr.sticmac.inputhandler",
+    "displayName": "Input System Handler",
+    "version": "0.0.1",
+    "unity": "2019.1",
+    "description": "Just a simple system to manage Unity new input system more easily.",
+    "author": {
+        "name": "Sticmac",
+        "email": "julien.lemaire@sticmac.fr",
+        "url": "https://sticmac.fr"
+    },
+    "keywords": [
+        "input",
+        "events",
+        "keyboard",
+        "mouse",
+        "gamepad",
+        "touch",
+        "vr",
+        "xr"
+    ],
+    "dependencies": {
+        "com.unity.inputsystem": "1.0.0"
+    }
+}
