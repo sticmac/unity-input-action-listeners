@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Sticmac.InputHandler {
-    public abstract class AbstractInputListener : MonoBehaviour {
+    public abstract class AbstractInputActionListener : MonoBehaviour {
         /// <summary>
         /// Player Input component for being plugged to the event system
         /// </summary>

@@ -3,7 +3,7 @@ using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 namespace Sticmac.InputHandler {
-    public class InputListener : AbstractInputListener
+    public class InputActionListener : AbstractInputActionListener
     {
         /// <summary>
         /// Event to be called when the action started

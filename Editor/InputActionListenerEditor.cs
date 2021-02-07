@@ -7,7 +7,7 @@ using UnityEditor;
 
 namespace Sticmac.InputHandler {
     
-    [CustomEditor(typeof(InputListener))]
+    [CustomEditor(typeof(InputActionListener))]
     public class InputListenerEditor : Editor {
         private SerializedObject _so = null;
 
