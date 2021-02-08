@@ -5,7 +5,7 @@ using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEditor;
 
-namespace Sticmac.InputHandler {
+namespace Sticmac.InputActionListeners {
     
     [CustomEditor(typeof(InputActionListener))]
     public class InputListenerEditor : Editor {

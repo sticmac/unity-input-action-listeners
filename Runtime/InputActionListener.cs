@@ -2,7 +2,7 @@
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
-namespace Sticmac.InputHandler {
+namespace Sticmac.InputActionListeners {
     public class InputActionListener : AbstractInputActionListener
     {
         /// <summary>

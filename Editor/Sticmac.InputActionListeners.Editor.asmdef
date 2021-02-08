@@ -1,9 +1,12 @@
 {
-    "name": "Sticmac.InputHandler.Runtime",
+    "name": "Sticmac.InputActionsListeners.Editor",
     "references": [
+        "GUID:24ca44e50b9b5795ba0be0eaa76ae9be",
         "GUID:75469ad4d38634e559750d17036d5f7c"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
