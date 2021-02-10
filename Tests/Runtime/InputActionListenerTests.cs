@@ -45,6 +45,7 @@ namespace Sticmac.InputActionListeners {
         }
 
         public override void TearDown() {
+            base.TearDown();
             _action1.Disable();
             _action2.Disable();
         }
