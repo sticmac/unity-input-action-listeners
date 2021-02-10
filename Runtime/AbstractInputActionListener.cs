@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -9,21 +10,48 @@ namespace Sticmac.InputActionListeners {
         /// Player Input component for being plugged to the event system
         /// </summary>
         [SerializeField] protected PlayerInput _playerInput = null;
+        public PlayerInput PlayerInput {
+            get => _playerInput;
+            set => Initialize(value);
+        }
 
         [SerializeField] protected string _selectedActionName = null;
 
+        public string SelectedActionName { get => _selectedActionName; set => _selectedActionName = value; }
+
+        #region Initialization methods
         protected virtual void OnEnable() {
-            _playerInput.notificationBehavior = PlayerNotifications.InvokeCSharpEvents;
-            _playerInput.onActionTriggered += HandleInput;
+            // Launch init logic on enable
+            if (_playerInput != null) { 
+                Initialize(_playerInput);
+            }
         }
         
         protected virtual void OnDisable() {
-            _playerInput.onActionTriggered -= HandleInput;
+            // Unsubscribe on disable
+            if (_playerInput != null) { 
+                _playerInput.onActionTriggered -= HandleInput;
+            }
         }
 
         protected virtual void Reset() {
-            _playerInput = GetComponent<PlayerInput>();
+            var playerInput = GetComponent<PlayerInput>();
+            if (playerInput != null) {
+                Initialize(playerInput);
+            }
         }
+
+        public virtual void Initialize(PlayerInput playerInput) {
+            // The method doesn't accept a null playerInput
+            if (playerInput == null) {
+                throw new ArgumentNullException("playerInput");
+            }
+
+            _playerInput = playerInput;
+            _playerInput.notificationBehavior = PlayerNotifications.InvokeCSharpEvents;
+            _playerInput.onActionTriggered += HandleInput;
+        }
+        #endregion
 
         /// <summary>
         /// Catches an emitted input from the player and triggers the corresponding callback if necessary
