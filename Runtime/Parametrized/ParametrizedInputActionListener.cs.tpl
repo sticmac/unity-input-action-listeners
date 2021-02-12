@@ -2,8 +2,8 @@
 using UnityEngine.Events;
 
 namespace Sticmac.InputActionListeners {
-    [Serializable]
-    public class <%= Type %>UnityEvent : UnityEvent<<%= TypeGeneric %>> {}
-
-    public class <%= Type %>InputActionListener : ParametrizedInputActionListener<<%= TypeGeneric %>, FloatUnityEvent> {}
+    public class <%= Type %>InputActionListener : ParametrizedInputActionListener<<%= TypeGeneric %>, <%= Type %>InputActionListener.UnityEvent> {
+        [Serializable]
+        public class UnityEvent : UnityEvent<<%= TypeGeneric %>> {}
+    }
 }

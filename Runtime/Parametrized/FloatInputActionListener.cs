@@ -2,8 +2,8 @@
 using UnityEngine.Events;
 
 namespace Sticmac.InputActionListeners {
-    [Serializable]
-    public class FloatUnityEvent : UnityEvent<float> {}
-
-    public class FloatInputActionListener : ParametrizedInputActionListener<float, FloatUnityEvent> {}
+    public class FloatInputActionListener : ParametrizedInputActionListener<float, FloatInputActionListener.UnityEvent> {
+        [Serializable]
+        public class UnityEvent : UnityEvent<float> {}
+    }
 }

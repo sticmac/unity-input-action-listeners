@@ -4,7 +4,7 @@ using UnityEngine.TestTools;
 using UnityEngine.InputSystem;
 
 namespace Sticmac.InputActionListeners {
-    public class <%= Type %>InputActionListenerTests : ParametrizedInputActionListenerTests<<%= TypeGeneric %>, <%= Type %>UnityEvent, <%= Type %>InputActionListener>
+    public class <%= Type %>InputActionListenerTests : ParametrizedInputActionListenerTests<<%= TypeGeneric %>, <%= Type %>InputActionListener.UnityEvent, <%= Type %>InputActionListener>
     {
         private static string Action3Name = "action3";
         private InputAction _action3 = null;

@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 using System.Collections;
 
 namespace Sticmac.InputActionListeners {
-    public class FloatInputActionListenerTests : ParametrizedInputActionListenerTests<float, FloatUnityEvent, FloatInputActionListener>
+    public class FloatInputActionListenerTests : ParametrizedInputActionListenerTests<float, FloatInputActionListener.UnityEvent, FloatInputActionListener>
     {
         private static string Action3Name = "action3";
         private InputAction _action3 = null;
