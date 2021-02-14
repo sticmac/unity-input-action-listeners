@@ -19,8 +19,10 @@ namespace Sticmac.InputActionListeners {
 
         protected InputActionMap _actionMap = null;
 
-        private InputAction _selectedAction = null;
+        protected InputAction _selectedAction = null;
         protected InputAction _otherAction = null;
+
+        protected bool _runCancelTests = true;
 
         protected Keyboard _keyboard = null;
         protected Gamepad _gamepad = null;
@@ -93,6 +95,8 @@ namespace Sticmac.InputActionListeners {
 
         [Test]
         public void TriggerAndReleaseSelectedActionShouldActivateCanceledCallback() {
+            if (!_runCancelTests) Assert.Ignore("Tests for cancel state are set to be ignored in this context.");
+
             _actionListener.SelectedActionName = SelectedActionName;
 
             bool called = false;
@@ -130,6 +134,8 @@ namespace Sticmac.InputActionListeners {
 
         [Test]
         public void TriggerAndReleaseAnotherActionShouldNotActivateCanceledCallback() {
+            if (!_runCancelTests) Assert.Ignore("Tests for cancel state are set to be ignored.");
+
             _actionListener.SelectedActionName = OtherActionName;
 
             bool called = false;
