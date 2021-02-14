@@ -1,27 +1,30 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
+using NUnit.Framework.Constraints;
 using UnityEngine;
 using UnityEngine.TestTools;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.XR;
 
 namespace Sticmac.InputActionListeners {
-    public class ParametrizedInputActionListenerTests<T, U, V> : InputTestFixture
+    public abstract class ParametrizedInputActionListenerTests<T, U, V> : InputTestFixture
         where T : struct
         where U : UnityEvent<T>, new()
         where V : ParametrizedInputActionListener<T, U>
     {
-        protected const string Action1Name = "action1";
-        protected const string Action2Name = "action2";
+        protected const string SelectedActionName = "selectedAction";
+        protected const string OtherActionName = "otherAction";
 
         protected InputActionMap _actionMap = null;
 
-        protected InputAction _action1 = null;
-        protected InputAction _action2 = null;
+        private InputAction _selectedAction = null;
+        protected InputAction _otherAction = null;
 
         protected Keyboard _keyboard = null;
         protected Gamepad _gamepad = null;
+        protected XRController _xrController = null;
 
         protected ParametrizedInputActionListener<T, U> _actionListener;
 
@@ -31,6 +34,7 @@ namespace Sticmac.InputActionListeners {
             // Input System config
             _keyboard = InputSystem.AddDevice<Keyboard>();
             _gamepad = InputSystem.AddDevice<Gamepad>();
+            _xrController = InputSystem.AddDevice<XRController>();
 
             GameObject go = new GameObject();
 
@@ -38,10 +42,11 @@ namespace Sticmac.InputActionListeners {
             InputActionAsset asset = ScriptableObject.CreateInstance<InputActionAsset>();
             _actionMap = asset.AddActionMap("map");
 
-            InitializeActions();
+            _selectedAction = CreateSelectedAction();
+            _otherAction = _actionMap.AddAction(OtherActionName, binding: "<Keyboard>/spaceKey");
 
-            _action1.Enable();
-            _action2.Enable();
+            _selectedAction.Enable();
+            _otherAction.Enable();
 
             // Player Input
             PlayerInput pi = go.AddComponent<PlayerInput>();
@@ -51,68 +56,81 @@ namespace Sticmac.InputActionListeners {
             _actionListener.PlayerInput = pi;
         }
         
-        protected virtual void InitializeActions() {
-            _action1 = _actionMap.AddAction(Action1Name, binding: "<Keyboard>/space");
-            _action2 = _actionMap.AddAction(Action2Name, binding: "<Gamepad>/leftStick");
-        }
+        protected abstract InputAction CreateSelectedAction();
 
         public override void TearDown() {
             base.TearDown();
-            _action1.Disable();
-            _action2.Disable();
+            _selectedAction.Disable();
+            _otherAction.Disable();
         }
+
+        public abstract void TriggerSelectedAction();
+        public abstract void CancelSelectedAction();
 
         [Test]
         public void TriggerSelectedActionShouldActivateStartedCallback() {
-            _actionListener.SelectedActionName = Action1Name;
+            _actionListener.SelectedActionName = SelectedActionName;
 
             bool called = false;
             _actionListener.Started.AddListener((v) => called = true);
 
-            Press(_keyboard.spaceKey);
+            TriggerSelectedAction();
+
+            Assert.That(called, Is.True);
+        }
+
+        [Test]
+        public void TriggerSelectedActionShouldActivatePerformedCallback() {
+            _actionListener.SelectedActionName = SelectedActionName;
+
+            bool called = false;
+            _actionListener.Performed.AddListener((v) => called = true);
+
+            TriggerSelectedAction();
+
+            Assert.That(called, Is.True);
+        }
+
+        [Test]
+        public void TriggerAndReleaseSelectedActionShouldActivateCanceledCallback() {
+            _actionListener.SelectedActionName = SelectedActionName;
+
+            bool called = false;
+            _actionListener.Canceled.AddListener((v) => called = true);
+
+            TriggerSelectedAction();
+            CancelSelectedAction();
 
             Assert.That(called, Is.True);
         }
 
         [Test]
         public void TriggerAnotherActionShouldNotActivateStartedCallback() {
-            _actionListener.SelectedActionName = Action1Name;
+            _actionListener.SelectedActionName = OtherActionName;
 
             bool called = false;
             _actionListener.Started.AddListener((v) => called = true);
 
-            Set(_gamepad.leftStick, new Vector2(0.1f, 0.234f));
+            Press(_keyboard.spaceKey);
 
             Assert.That(called, Is.False);
         }
 
         [Test]
-        public void TriggerSelectedActionShouldActivatePerformedCallback() {
-            _actionListener.SelectedActionName = Action1Name;
+        public void TriggerAnotherActionShouldNotActivatePerformedCallback() {
+            _actionListener.SelectedActionName = OtherActionName;
 
             bool called = false;
             _actionListener.Performed.AddListener((v) => called = true);
 
             Press(_keyboard.spaceKey);
 
-            Assert.That(called, Is.True);
-        }
-
-        [Test]
-        public void TriggerAnotherActionShouldNotActivatePerformedCallback() {
-            _actionListener.SelectedActionName = Action1Name;
-
-            bool called = false;
-            _actionListener.Performed.AddListener((v) => called = true);
-
-            Set(_gamepad.leftStick, new Vector2(0.123f, 0.234f));
-
             Assert.That(called, Is.False);
         }
 
         [Test]
-        public void TriggerAndReleaseSelectedActionShouldActivateCanceledCallback() {
-            _actionListener.SelectedActionName = Action1Name;
+        public void TriggerAndReleaseAnotherActionShouldNotActivateCanceledCallback() {
+            _actionListener.SelectedActionName = OtherActionName;
 
             bool called = false;
             _actionListener.Canceled.AddListener((v) => called = true);
@@ -120,20 +138,33 @@ namespace Sticmac.InputActionListeners {
             Press(_keyboard.spaceKey);
             Release(_keyboard.spaceKey);
 
-            Assert.That(called, Is.True);
+            Assert.That(called, Is.False);
+        }
+
+        public abstract IResolveConstraint IsValid();
+
+        [Test]
+        public void TriggerSelectedActionShouldActivateStartedCallbackWithGoodValue() {
+            _actionListener.SelectedActionName = SelectedActionName;
+
+            T value = default(T);
+            _actionListener.Started.AddListener((v) => value = v);
+
+            TriggerSelectedAction();
+
+            Assert.That(value, IsValid());
         }
 
         [Test]
-        public void TriggerAndReleaseAnotherActionShouldNotActivateCanceledCallback() {
-            _actionListener.SelectedActionName = Action1Name;
+        public void TriggerSelectedActionShouldActivatePerformedCallbackWithGoodValue() {
+            _actionListener.SelectedActionName = SelectedActionName;
 
-            bool called = false;
-            _actionListener.Canceled.AddListener((v) => called = true);
+            T value = default(T);
+            _actionListener.Performed.AddListener((v) => value = v);
 
-            Set(_gamepad.leftStick, new Vector2(0.123f, 0.234f));
-            Set(_gamepad.leftStick, new Vector2(0f, 0f));
+            TriggerSelectedAction();
 
-            Assert.That(called, Is.False);
+            Assert.That(value, IsValid());
         }
     } 
 }
