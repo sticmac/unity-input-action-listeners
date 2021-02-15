@@ -1,30 +1,48 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 namespace Sticmac.InputActionListeners {
     public class InputActionListener : AbstractInputActionListener
     {
+        #region C# Events
+        /// <summary>
+        /// Event to be called when the action has started. C# Action version
+        /// </summary>
+        public event Action Started;
+        /// <summary>
+        /// Event to be called when the action has performed. C# Action version
+        /// </summary>
+        public event Action Performed;
+        /// <summary>
+        /// Event to be called when the action has canceled. C# Action version
+        /// </summary>
+        public event Action Canceled;
+        #endregion
+
+        #region Unity Events
         /// <summary>
         /// Event to be called when the action has started
         /// </summary>
-        public UnityEvent Started;
+        public UnityEvent StartedUnityEvent;
         /// <summary>
         /// Event to be called when the action has performed
         /// </summary>
-        public UnityEvent Performed;
+        public UnityEvent PerformedUnityEvent;
         /// <summary>
         /// Event to be called when the action has canceled
         /// </summary>
-        public UnityEvent Canceled;
+        public UnityEvent CanceledUnityEvent;
+        #endregion
 
         public override void Initialize(PlayerInput playerInput)
         {
             base.Initialize(playerInput);
 
-            Started = new UnityEvent();
-            Performed = new UnityEvent();
-            Canceled = new UnityEvent();
+            StartedUnityEvent = new UnityEvent();
+            PerformedUnityEvent = new UnityEvent();
+            CanceledUnityEvent = new UnityEvent();
         }
 
         /// <summary>
@@ -34,13 +52,13 @@ namespace Sticmac.InputActionListeners {
         protected override void HandleInput(InputAction.CallbackContext context) {
             if (_selectedActionName == context.action.name) {
                 if (context.started) {
-                    Started.Invoke();
+                    StartedUnityEvent.Invoke();
                 }
                 if (context.performed) {
-                    Performed.Invoke();
+                    PerformedUnityEvent.Invoke();
                 }
                 if (context.canceled) {
-                    Canceled.Invoke();
+                    CanceledUnityEvent.Invoke();
                 }
             }
         }

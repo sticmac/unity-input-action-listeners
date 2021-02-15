@@ -15,9 +15,18 @@ namespace Sticmac.InputActionListeners {
             set => Initialize(value);
         }
 
+        /// <summary>
+        /// Name of the selected action
+        /// </summary>
         [SerializeField] protected string _selectedActionName = null;
-
         public string SelectedActionName { get => _selectedActionName; set => _selectedActionName = value; }
+
+        [Serializable]
+        public enum EventsMode {
+            InvokeUnityEvents,
+            InvokeCSharpEvents
+        }
+        [SerializeField] protected EventsMode _eventsMode;
 
         #region Initialization methods
         protected virtual void OnEnable() {

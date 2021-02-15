@@ -74,7 +74,7 @@ namespace Sticmac.InputActionListeners {
             _actionListener.SelectedActionName = SelectedActionName;
 
             bool called = false;
-            _actionListener.Started.AddListener((v) => called = true);
+            _actionListener.StartedUnityEvent.AddListener((v) => called = true);
 
             TriggerSelectedAction();
 
@@ -86,7 +86,7 @@ namespace Sticmac.InputActionListeners {
             _actionListener.SelectedActionName = SelectedActionName;
 
             bool called = false;
-            _actionListener.Performed.AddListener((v) => called = true);
+            _actionListener.PerformedUnityEvent.AddListener((v) => called = true);
 
             TriggerSelectedAction();
 
@@ -100,7 +100,7 @@ namespace Sticmac.InputActionListeners {
             _actionListener.SelectedActionName = SelectedActionName;
 
             bool called = false;
-            _actionListener.Canceled.AddListener((v) => called = true);
+            _actionListener.CanceledUnityEvent.AddListener((v) => called = true);
 
             TriggerSelectedAction();
             CancelSelectedAction();
@@ -113,7 +113,7 @@ namespace Sticmac.InputActionListeners {
             _actionListener.SelectedActionName = OtherActionName;
 
             bool called = false;
-            _actionListener.Started.AddListener((v) => called = true);
+            _actionListener.StartedUnityEvent.AddListener((v) => called = true);
 
             Press(_keyboard.spaceKey);
 
@@ -125,7 +125,7 @@ namespace Sticmac.InputActionListeners {
             _actionListener.SelectedActionName = OtherActionName;
 
             bool called = false;
-            _actionListener.Performed.AddListener((v) => called = true);
+            _actionListener.PerformedUnityEvent.AddListener((v) => called = true);
 
             Press(_keyboard.spaceKey);
 
@@ -139,7 +139,7 @@ namespace Sticmac.InputActionListeners {
             _actionListener.SelectedActionName = OtherActionName;
 
             bool called = false;
-            _actionListener.Canceled.AddListener((v) => called = true);
+            _actionListener.CanceledUnityEvent.AddListener((v) => called = true);
 
             Press(_keyboard.spaceKey);
             Release(_keyboard.spaceKey);
@@ -154,7 +154,7 @@ namespace Sticmac.InputActionListeners {
             _actionListener.SelectedActionName = SelectedActionName;
 
             T value = default(T);
-            _actionListener.Started.AddListener((v) => value = v);
+            _actionListener.StartedUnityEvent.AddListener((v) => value = v);
 
             TriggerSelectedAction();
 
@@ -166,7 +166,7 @@ namespace Sticmac.InputActionListeners {
             _actionListener.SelectedActionName = SelectedActionName;
 
             T value = default(T);
-            _actionListener.Performed.AddListener((v) => value = v);
+            _actionListener.PerformedUnityEvent.AddListener((v) => value = v);
 
             TriggerSelectedAction();
 

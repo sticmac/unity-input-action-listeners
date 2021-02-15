@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -9,31 +10,48 @@ namespace Sticmac.InputActionListeners {
         where T : struct
         where U : UnityEvent<T>, new()
     {
+        #region C# Events
         /// <summary>
-        /// Event to be called when the action has started
+        /// Event to be called when the action has started. C# Action version
         /// </summary>
-        public U Started;
+        public event Action<T> Started;
         /// <summary>
-        /// Event to be called when the action has performed
+        /// Event to be called when the action has performed. C# Action version
         /// </summary>
-        public U Performed;
+        public event Action<T> Performed;
         /// <summary>
-        /// Event to be called when the action has canceled
+        /// Event to be called when the action has canceled. C# Action version
         /// </summary>
-        public U Canceled;
+        public event Action<T> Canceled;
+        #endregion
+
+        #region Unity Events
+        /// <summary>
+        /// Event to be called when the action has started. Unity Event version
+        /// </summary>
+        public U StartedUnityEvent;
+        /// <summary>
+        /// Event to be called when the action has performed. Unity Event version
+        /// </summary>
+        public U PerformedUnityEvent;
+        /// <summary>
+        /// Event to be called when the action has canceled. Unity Event version
+        /// </summary>
+        public U CanceledUnityEvent;
+        #endregion
 
         protected override void HandleInput(InputAction.CallbackContext context)
         {
             if (_selectedActionName == context.action.name) {
                 var val = context.ReadValue<T>();
                 if (context.started) {
-                    Started.Invoke(val);
+                    StartedUnityEvent.Invoke(val);
                 }
                 if (context.performed) {
-                    Performed.Invoke(val);
+                    PerformedUnityEvent.Invoke(val);
                 }
                 if (context.canceled) {
-                    Canceled.Invoke(val);
+                    CanceledUnityEvent.Invoke(val);
                 }
             }
         }
@@ -42,9 +60,9 @@ namespace Sticmac.InputActionListeners {
         {
             base.Initialize(playerInput);
 
-            Started = new U();
-            Performed = new U();
-            Canceled = new U();
+            StartedUnityEvent = new U();
+            PerformedUnityEvent = new U();
+            CanceledUnityEvent = new U();
         }
     }
 }

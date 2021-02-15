@@ -55,7 +55,7 @@ namespace Sticmac.InputActionListeners {
             _actionListener.SelectedActionName = Action1Name;
 
             bool called = false;
-            _actionListener.Started.AddListener(() => called = true);
+            _actionListener.StartedUnityEvent.AddListener(() => called = true);
 
             Press(_keyboard.spaceKey);
 
@@ -67,7 +67,7 @@ namespace Sticmac.InputActionListeners {
             _actionListener.SelectedActionName = Action1Name;
 
             bool called = false;
-            _actionListener.Started.AddListener(() => called = true);
+            _actionListener.StartedUnityEvent.AddListener(() => called = true);
 
             Set(_gamepad.leftStick, new Vector2(0.123f, 0.234f));
 
@@ -79,7 +79,7 @@ namespace Sticmac.InputActionListeners {
             _actionListener.SelectedActionName = Action1Name;
 
             bool called = false;
-            _actionListener.Performed.AddListener(() => called = true);
+            _actionListener.PerformedUnityEvent.AddListener(() => called = true);
 
             Press(_keyboard.spaceKey);
 
@@ -91,7 +91,7 @@ namespace Sticmac.InputActionListeners {
             _actionListener.SelectedActionName = Action1Name;
 
             bool called = false;
-            _actionListener.Performed.AddListener(() => called = true);
+            _actionListener.PerformedUnityEvent.AddListener(() => called = true);
 
             Set(_gamepad.leftStick, new Vector2(0.123f, 0.234f));
 
@@ -103,7 +103,7 @@ namespace Sticmac.InputActionListeners {
             _actionListener.SelectedActionName = Action1Name;
 
             bool called = false;
-            _actionListener.Canceled.AddListener(() => called = true);
+            _actionListener.CanceledUnityEvent.AddListener(() => called = true);
 
             Press(_keyboard.spaceKey);
             Release(_keyboard.spaceKey);
@@ -116,7 +116,7 @@ namespace Sticmac.InputActionListeners {
             _actionListener.SelectedActionName = Action1Name;
 
             bool called = false;
-            _actionListener.Canceled.AddListener(() => called = true);
+            _actionListener.CanceledUnityEvent.AddListener(() => called = true);
 
             Set(_gamepad.leftStick, new Vector2(0.123f, 0.234f));
             Set(_gamepad.leftStick, new Vector2(0f, 0f));

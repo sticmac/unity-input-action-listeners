@@ -13,6 +13,7 @@ namespace Sticmac.InputActionListeners {
 
         private SerializedProperty _playerInputProperty = null;
         private SerializedProperty _selectedActionNameProperty = null;
+        private SerializedProperty _eventsModeProperty = null;
         private SerializedProperty _startedEventProperty = null;
         private SerializedProperty _performedEventProperty = null;
         private SerializedProperty _canceledEventProperty = null;
@@ -27,9 +28,12 @@ namespace Sticmac.InputActionListeners {
 
             _playerInputProperty = _so.FindProperty("_playerInput");
             _selectedActionNameProperty = _so.FindProperty("_selectedActionName");
-            _startedEventProperty = _so.FindProperty("Started");
-            _performedEventProperty = _so.FindProperty("Performed");
-            _canceledEventProperty = _so.FindProperty("Canceled");
+
+            _eventsModeProperty = _so.FindProperty("_eventsMode");
+
+            _startedEventProperty = _so.FindProperty("StartedUnityEvent");
+            _performedEventProperty = _so.FindProperty("PerformedUnityEvent");
+            _canceledEventProperty = _so.FindProperty("CanceledUnityEvent");
 
             PlayerInput playerInput = _playerInputProperty.objectReferenceValue as PlayerInput;
             if (playerInput != null) {
@@ -55,16 +59,22 @@ namespace Sticmac.InputActionListeners {
             }
 
             if (_playerInputProperty.objectReferenceValue != null) {
-                EditorGUILayout.Space(5);
+                EditorGUILayout.Space(10);
 
                 // Selected action
                 _lastSelectedActionIndex = EditorGUILayout.Popup("Selected Action", _lastSelectedActionIndex, _actionsNames);
                 _selectedActionNameProperty.stringValue = _actionsNames[_lastSelectedActionIndex];
 
-                // Events
-                EditorGUILayout.PropertyField(_startedEventProperty);
-                EditorGUILayout.PropertyField(_performedEventProperty);
-                EditorGUILayout.PropertyField(_canceledEventProperty);
+                EditorGUILayout.PropertyField(_eventsModeProperty);
+
+                EditorGUILayout.Space(5);
+
+                // Events (displayed only if the unity events mode is selected)
+                if ((AbstractInputActionListener.EventsMode)_eventsModeProperty.enumValueIndex == AbstractInputActionListener.EventsMode.InvokeUnityEvents) {
+                    EditorGUILayout.PropertyField(_startedEventProperty, new GUIContent("Started"));
+                    EditorGUILayout.PropertyField(_performedEventProperty, new GUIContent("Performed"));
+                    EditorGUILayout.PropertyField(_canceledEventProperty, new GUIContent("Canceled"));
+                }
             } else {
                 EditorGUILayout.HelpBox("Please assign a Player Input to this script.", MessageType.Error);
             }
