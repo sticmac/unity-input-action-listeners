@@ -44,14 +44,29 @@ namespace Sticmac.InputActionListeners {
         {
             if (_selectedActionName == context.action.name) {
                 var val = context.ReadValue<T>();
-                if (context.started) {
-                    StartedUnityEvent.Invoke(val);
-                }
-                if (context.performed) {
-                    PerformedUnityEvent.Invoke(val);
-                }
-                if (context.canceled) {
-                    CanceledUnityEvent.Invoke(val);
+                switch (_eventsMode) {
+                    case EventsMode.InvokeUnityEvents:
+                        if (context.started) {
+                            StartedUnityEvent.Invoke(val);
+                        }
+                        if (context.performed) {
+                            PerformedUnityEvent.Invoke(val);
+                        }
+                        if (context.canceled) {
+                            CanceledUnityEvent.Invoke(val);
+                        }
+                        break;
+                    case EventsMode.InvokeCSharpEvents:
+                        if (context.started) {
+                            Started?.Invoke(val);
+                        }
+                        if (context.performed) {
+                            Performed?.Invoke(val);
+                        }
+                        if (context.canceled) {
+                            Canceled?.Invoke(val);
+                        }
+                        break;
                 }
             }
         }

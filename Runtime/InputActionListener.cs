@@ -51,14 +51,30 @@ namespace Sticmac.InputActionListeners {
         /// <param name="context">The whole context of the player input</param>
         protected override void HandleInput(InputAction.CallbackContext context) {
             if (_selectedActionName == context.action.name) {
-                if (context.started) {
-                    StartedUnityEvent.Invoke();
-                }
-                if (context.performed) {
-                    PerformedUnityEvent.Invoke();
-                }
-                if (context.canceled) {
-                    CanceledUnityEvent.Invoke();
+                switch (_eventsMode) {
+                    case EventsMode.InvokeUnityEvents:
+                        if (context.started) {
+                            StartedUnityEvent.Invoke();
+                        }
+                        if (context.performed) {
+                            PerformedUnityEvent.Invoke();
+                        }
+                        if (context.canceled) {
+                            CanceledUnityEvent.Invoke();
+                        }
+                        break;
+
+                    case EventsMode.InvokeCSharpEvents:
+                        if (context.started) {
+                            Started?.Invoke();
+                        }
+                        if (context.performed) {
+                            Performed?.Invoke();
+                        }
+                        if (context.canceled) {
+                            Canceled?.Invoke();
+                        }
+                        break;
                 }
             }
         }
