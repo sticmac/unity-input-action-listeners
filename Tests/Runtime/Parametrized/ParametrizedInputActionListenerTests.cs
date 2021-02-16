@@ -70,7 +70,8 @@ namespace Sticmac.InputActionListeners {
         public abstract void CancelSelectedAction();
 
         [Test]
-        public void TriggerSelectedActionShouldActivateStartedCallback() {
+        public void TriggerSelectedActionShouldActivateStartedUnityEventCallback() {
+            _actionListener.EventsActivationMode = AbstractInputActionListener.EventsMode.InvokeUnityEvents;
             _actionListener.SelectedActionName = SelectedActionName;
 
             bool called = false;
@@ -82,7 +83,47 @@ namespace Sticmac.InputActionListeners {
         }
 
         [Test]
-        public void TriggerSelectedActionShouldActivatePerformedCallback() {
+        public void TriggerSelectedActionShouldActivateStartedCSharpEventCallback() {
+            _actionListener.EventsActivationMode = AbstractInputActionListener.EventsMode.InvokeCSharpEvents;
+            _actionListener.SelectedActionName = SelectedActionName;
+
+            bool called = false;
+            _actionListener.Started += (v) => called = true;
+
+            TriggerSelectedAction();
+
+            Assert.That(called, Is.True);
+        }
+
+        [Test]
+        public void TriggerSelectedActionShouldNotActivateStartedUnityEventCallbackWhenWrongModeIsSelected() {
+            _actionListener.EventsActivationMode = AbstractInputActionListener.EventsMode.InvokeCSharpEvents;
+            _actionListener.SelectedActionName = SelectedActionName;
+
+            bool called = false;
+            _actionListener.StartedUnityEvent.AddListener((v) => called = true);
+
+            TriggerSelectedAction();
+
+            Assert.That(called, Is.False);
+        }
+
+        [Test]
+        public void TriggerSelectedActionNotShouldActivateStartedCSharpEventCallbackWhenWrongModeIsSelected() {
+            _actionListener.EventsActivationMode = AbstractInputActionListener.EventsMode.InvokeUnityEvents;
+            _actionListener.SelectedActionName = SelectedActionName;
+
+            bool called = false;
+            _actionListener.Started += (v) => called = true;
+
+            TriggerSelectedAction();
+
+            Assert.That(called, Is.False);
+        }
+
+        [Test]
+        public void TriggerSelectedActionShouldActivatePerformedUnityEventCallback() {
+            _actionListener.EventsActivationMode = AbstractInputActionListener.EventsMode.InvokeUnityEvents;
             _actionListener.SelectedActionName = SelectedActionName;
 
             bool called = false;
@@ -94,9 +135,49 @@ namespace Sticmac.InputActionListeners {
         }
 
         [Test]
-        public void TriggerAndReleaseSelectedActionShouldActivateCanceledCallback() {
+        public void TriggerSelectedActionShouldActivatePerformedCSharpEventCallback() {
+            _actionListener.EventsActivationMode = AbstractInputActionListener.EventsMode.InvokeCSharpEvents;
+            _actionListener.SelectedActionName = SelectedActionName;
+
+            bool called = false;
+            _actionListener.Performed += (v) => called = true;
+
+            TriggerSelectedAction();
+
+            Assert.That(called, Is.True);
+        }
+
+        [Test]
+        public void TriggerSelectedActionShouldNotActivatePerformedUnityEventCallbackWhenWrongModeIsSelected() {
+            _actionListener.EventsActivationMode = AbstractInputActionListener.EventsMode.InvokeCSharpEvents;
+            _actionListener.SelectedActionName = SelectedActionName;
+
+            bool called = false;
+            _actionListener.PerformedUnityEvent.AddListener((v) => called = true);
+
+            TriggerSelectedAction();
+
+            Assert.That(called, Is.False);
+        }
+
+        [Test]
+        public void TriggerSelectedActionShouldNotActivatePerformedCSharpEventCallbackWhenWrongModeIsSelected() {
+            _actionListener.EventsActivationMode = AbstractInputActionListener.EventsMode.InvokeUnityEvents;
+            _actionListener.SelectedActionName = SelectedActionName;
+
+            bool called = false;
+            _actionListener.Performed += (v) => called = true;
+
+            TriggerSelectedAction();
+
+            Assert.That(called, Is.False);
+        }
+
+        [Test]
+        public void TriggerAndReleaseSelectedActionShouldActivateCanceledUnityEventCallback() {
             if (!_runCancelTests) Assert.Ignore("Tests for cancel state are set to be ignored in this context.");
 
+            _actionListener.EventsActivationMode = AbstractInputActionListener.EventsMode.InvokeUnityEvents;
             _actionListener.SelectedActionName = SelectedActionName;
 
             bool called = false;
@@ -109,7 +190,56 @@ namespace Sticmac.InputActionListeners {
         }
 
         [Test]
-        public void TriggerAnotherActionShouldNotActivateStartedCallback() {
+        public void TriggerAndReleaseSelectedActionShouldActivateCanceledCSharpEventCallback() {
+            if (!_runCancelTests) Assert.Ignore("Tests for cancel state are set to be ignored in this context.");
+
+            _actionListener.EventsActivationMode = AbstractInputActionListener.EventsMode.InvokeCSharpEvents;
+            _actionListener.SelectedActionName = SelectedActionName;
+
+            bool called = false;
+            _actionListener.Canceled += (v) => called = true;
+
+            TriggerSelectedAction();
+            CancelSelectedAction();
+
+            Assert.That(called, Is.True);
+        }
+
+        [Test]
+        public void TriggerAndReleaseSelectedActionShouldNotActivateCanceledUnityEventCallbackWhenWrongModeIsSelected() {
+            if (!_runCancelTests) Assert.Ignore("Tests for cancel state are set to be ignored in this context.");
+
+            _actionListener.EventsActivationMode = AbstractInputActionListener.EventsMode.InvokeCSharpEvents;
+            _actionListener.SelectedActionName = SelectedActionName;
+
+            bool called = false;
+            _actionListener.CanceledUnityEvent.AddListener((v) => called = true);
+
+            TriggerSelectedAction();
+            CancelSelectedAction();
+
+            Assert.That(called, Is.False);
+        }
+
+        [Test]
+        public void TriggerAndReleaseSelectedActionShouldNotActivateCanceledCSharpEventCallbackWhenWrongModeIsSelected() {
+            if (!_runCancelTests) Assert.Ignore("Tests for cancel state are set to be ignored in this context.");
+
+            _actionListener.EventsActivationMode = AbstractInputActionListener.EventsMode.InvokeUnityEvents;
+            _actionListener.SelectedActionName = SelectedActionName;
+
+            bool called = false;
+            _actionListener.Canceled += (v) => called = true;
+
+            TriggerSelectedAction();
+            CancelSelectedAction();
+
+            Assert.That(called, Is.False);
+        }
+
+        [Test]
+        public void TriggerAnotherActionShouldNotActivateStartedUnityEventCallback() {
+            _actionListener.EventsActivationMode = AbstractInputActionListener.EventsMode.InvokeUnityEvents;
             _actionListener.SelectedActionName = OtherActionName;
 
             bool called = false;
@@ -121,7 +251,21 @@ namespace Sticmac.InputActionListeners {
         }
 
         [Test]
-        public void TriggerAnotherActionShouldNotActivatePerformedCallback() {
+        public void TriggerAnotherActionShouldNotActivateStartedCSharpEventCallback() {
+            _actionListener.EventsActivationMode = AbstractInputActionListener.EventsMode.InvokeCSharpEvents;
+            _actionListener.SelectedActionName = OtherActionName;
+
+            bool called = false;
+            _actionListener.Started += (v) => called = true;
+
+            Press(_keyboard.spaceKey);
+
+            Assert.That(called, Is.False);
+        }
+
+        [Test]
+        public void TriggerAnotherActionShouldNotActivatePerformedUnityEventCallback() {
+            _actionListener.EventsActivationMode = AbstractInputActionListener.EventsMode.InvokeUnityEvents;
             _actionListener.SelectedActionName = OtherActionName;
 
             bool called = false;
@@ -133,9 +277,23 @@ namespace Sticmac.InputActionListeners {
         }
 
         [Test]
-        public void TriggerAndReleaseAnotherActionShouldNotActivateCanceledCallback() {
+        public void TriggerAnotherActionShouldNotActivatePerformedCSharpEventCallback() {
+            _actionListener.EventsActivationMode = AbstractInputActionListener.EventsMode.InvokeCSharpEvents;
+            _actionListener.SelectedActionName = OtherActionName;
+
+            bool called = false;
+            _actionListener.Performed += (v) => called = true;
+
+            Press(_keyboard.spaceKey);
+
+            Assert.That(called, Is.False);
+        }
+
+        [Test]
+        public void TriggerAndReleaseAnotherActionShouldNotActivateCanceledUnityEventCallback() {
             if (!_runCancelTests) Assert.Ignore("Tests for cancel state are set to be ignored.");
 
+            _actionListener.EventsActivationMode = AbstractInputActionListener.EventsMode.InvokeUnityEvents;
             _actionListener.SelectedActionName = OtherActionName;
 
             bool called = false;
@@ -147,10 +305,27 @@ namespace Sticmac.InputActionListeners {
             Assert.That(called, Is.False);
         }
 
+        [Test]
+        public void TriggerAndReleaseAnotherActionShouldNotActivateCanceledCSharpEventCallback() {
+            if (!_runCancelTests) Assert.Ignore("Tests for cancel state are set to be ignored.");
+
+            _actionListener.EventsActivationMode = AbstractInputActionListener.EventsMode.InvokeCSharpEvents;
+            _actionListener.SelectedActionName = OtherActionName;
+
+            bool called = false;
+            _actionListener.Canceled += (v) => called = true;
+
+            Press(_keyboard.spaceKey);
+            Release(_keyboard.spaceKey);
+
+            Assert.That(called, Is.False);
+        }
+
         public abstract IResolveConstraint IsValid();
 
         [Test]
-        public void TriggerSelectedActionShouldActivateStartedCallbackWithGoodValue() {
+        public void TriggerSelectedActionShouldActivateStartedUnityEventCallbackWithGoodValue() {
+            _actionListener.EventsActivationMode = AbstractInputActionListener.EventsMode.InvokeUnityEvents;
             _actionListener.SelectedActionName = SelectedActionName;
 
             T value = default(T);
@@ -162,11 +337,38 @@ namespace Sticmac.InputActionListeners {
         }
 
         [Test]
-        public void TriggerSelectedActionShouldActivatePerformedCallbackWithGoodValue() {
+        public void TriggerSelectedActionShouldActivateStartedCSharpEventCallbackWithGoodValue() {
+            _actionListener.EventsActivationMode = AbstractInputActionListener.EventsMode.InvokeCSharpEvents;
+            _actionListener.SelectedActionName = SelectedActionName;
+
+            T value = default(T);
+            _actionListener.Started += (v) => value = v;
+
+            TriggerSelectedAction();
+
+            Assert.That(value, IsValid());
+        }
+
+        [Test]
+        public void TriggerSelectedActionShouldActivatePerformedUnityEventCallbackWithGoodValue() {
+            _actionListener.EventsActivationMode = AbstractInputActionListener.EventsMode.InvokeUnityEvents;
             _actionListener.SelectedActionName = SelectedActionName;
 
             T value = default(T);
             _actionListener.PerformedUnityEvent.AddListener((v) => value = v);
+
+            TriggerSelectedAction();
+
+            Assert.That(value, IsValid());
+        }
+
+        [Test]
+        public void TriggerSelectedActionShouldActivatePerformedCSharpEventCallbackWithGoodValue() {
+            _actionListener.EventsActivationMode = AbstractInputActionListener.EventsMode.InvokeCSharpEvents;
+            _actionListener.SelectedActionName = SelectedActionName;
+
+            T value = default(T);
+            _actionListener.Performed += (v) => value = v;
 
             TriggerSelectedAction();
 
