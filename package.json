@@ -1,8 +1,8 @@
 {
   "name": "fr.sticmac.inputactionlisteners",
   "displayName": "Input Action Listeners",
-  "version": "0.3.0",
-  "unity": "2019.1",
+  "version": "1.0.0",
+  "unity": "2019.4",
   "description": "Just a simple system to manage Unity new input system more easily.",
   "author": {
     "name": "Sticmac",
