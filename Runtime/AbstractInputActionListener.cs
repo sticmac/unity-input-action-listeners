@@ -26,7 +26,8 @@ namespace Sticmac.InputActionListeners {
             InvokeUnityEvents,
             InvokeCSharpEvents
         }
-        [SerializeField] protected EventsMode _eventsMode;
+        [SerializeField] private EventsMode _eventsActivationMode;
+        public EventsMode EventsActivationMode { get => _eventsActivationMode; set => _eventsActivationMode = value; }
 
         #region Initialization methods
         protected virtual void OnEnable() {

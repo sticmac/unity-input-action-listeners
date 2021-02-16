@@ -29,7 +29,7 @@ namespace Sticmac.InputActionListeners {
             _playerInputProperty = _so.FindProperty("_playerInput");
             _selectedActionNameProperty = _so.FindProperty("_selectedActionName");
 
-            _eventsModeProperty = _so.FindProperty("_eventsMode");
+            _eventsModeProperty = _so.FindProperty("_eventsActivationMode");
 
             _startedEventProperty = _so.FindProperty("StartedUnityEvent");
             _performedEventProperty = _so.FindProperty("PerformedUnityEvent");

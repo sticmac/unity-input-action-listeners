@@ -51,7 +51,8 @@ namespace Sticmac.InputActionListeners {
         }
 
         [Test]
-        public void TriggerSelectedActionShouldActivateStartedCallback() {
+        public void TriggerSelectedActionShouldActivateStartedUnityEventCallback() {
+            _actionListener.EventsActivationMode = AbstractInputActionListener.EventsMode.InvokeUnityEvents;
             _actionListener.SelectedActionName = Action1Name;
 
             bool called = false;
@@ -63,7 +64,47 @@ namespace Sticmac.InputActionListeners {
         }
 
         [Test]
-        public void TriggerAnotherActionShouldNotActivateStartedCallback() {
+        public void TriggerSelectedActionShouldActivateStartedCSharpEventCallback() {
+            _actionListener.EventsActivationMode = AbstractInputActionListener.EventsMode.InvokeCSharpEvents;
+            _actionListener.SelectedActionName = Action1Name;
+
+            bool called = false;
+            _actionListener.Started += () => called = true;
+
+            Press(_keyboard.spaceKey);
+
+            Assert.That(called, Is.True);
+        }
+
+        [Test]
+        public void TriggerSelectedActionShouldNotActivateStartedUnityEventCallbackWhenWrongModeIsSelected() {
+            _actionListener.EventsActivationMode = AbstractInputActionListener.EventsMode.InvokeCSharpEvents;
+            _actionListener.SelectedActionName = Action1Name;
+
+            bool called = false;
+            _actionListener.StartedUnityEvent.AddListener(() => called = true);
+
+            Press(_keyboard.spaceKey);
+
+            Assert.That(called, Is.False);
+        }
+
+        [Test]
+        public void TriggerSelectedActionShouldNotActivateStartedCSharpEventCallbackWhenWrongModeIsSelected() {
+            _actionListener.EventsActivationMode = AbstractInputActionListener.EventsMode.InvokeUnityEvents;
+            _actionListener.SelectedActionName = Action1Name;
+
+            bool called = false;
+            _actionListener.Started += () => called = true;
+
+            Press(_keyboard.spaceKey);
+
+            Assert.That(called, Is.False);
+        }
+
+        [Test]
+        public void TriggerAnotherActionShouldNotActivateStartedUnityEventCallback() {
+            _actionListener.EventsActivationMode = AbstractInputActionListener.EventsMode.InvokeUnityEvents;
             _actionListener.SelectedActionName = Action1Name;
 
             bool called = false;
@@ -75,7 +116,21 @@ namespace Sticmac.InputActionListeners {
         }
 
         [Test]
-        public void TriggerSelectedActionShouldActivatePerformedCallback() {
+        public void TriggerAnotherActionShouldNotActivateStartedCSharpEventCallback() {
+            _actionListener.EventsActivationMode = AbstractInputActionListener.EventsMode.InvokeCSharpEvents;
+            _actionListener.SelectedActionName = Action1Name;
+
+            bool called = false;
+            _actionListener.Started += () => called = true;
+
+            Set(_gamepad.leftStick, new Vector2(0.123f, 0.234f));
+
+            Assert.That(called, Is.False);
+        }
+
+        [Test]
+        public void TriggerSelectedActionShouldActivatePerformedUnityEventCallback() {
+            _actionListener.EventsActivationMode = AbstractInputActionListener.EventsMode.InvokeUnityEvents;
             _actionListener.SelectedActionName = Action1Name;
 
             bool called = false;
@@ -87,7 +142,47 @@ namespace Sticmac.InputActionListeners {
         }
 
         [Test]
-        public void TriggerAnotherActionShouldNotActivatePerformedCallback() {
+        public void TriggerSelectedActionShouldActivatePerformedCSharpEventCallback() {
+            _actionListener.EventsActivationMode = AbstractInputActionListener.EventsMode.InvokeCSharpEvents;
+            _actionListener.SelectedActionName = Action1Name;
+
+            bool called = false;
+            _actionListener.Performed += () => called = true;
+
+            Press(_keyboard.spaceKey);
+
+            Assert.That(called, Is.True);
+        }
+
+        [Test]
+        public void TriggerSelectedActionShouldNotActivatePerformedUnityEventCallbackWhenWrongModeIsSelected() {
+            _actionListener.EventsActivationMode = AbstractInputActionListener.EventsMode.InvokeCSharpEvents;
+            _actionListener.SelectedActionName = Action1Name;
+
+            bool called = false;
+            _actionListener.PerformedUnityEvent.AddListener(() => called = true);
+
+            Press(_keyboard.spaceKey);
+
+            Assert.That(called, Is.False);
+        }
+
+        [Test]
+        public void TriggerSelectedActionShouldNotActivatePerformedCSharpEventCallbackWhenWrongModeIsSelected() {
+            _actionListener.EventsActivationMode = AbstractInputActionListener.EventsMode.InvokeUnityEvents;
+            _actionListener.SelectedActionName = Action1Name;
+
+            bool called = false;
+            _actionListener.Performed += () => called = true;
+
+            Press(_keyboard.spaceKey);
+
+            Assert.That(called, Is.False);
+        }
+
+        [Test]
+        public void TriggerAnotherActionShouldNotActivatePerformedUnityEventCallback() {
+            _actionListener.EventsActivationMode = AbstractInputActionListener.EventsMode.InvokeUnityEvents;
             _actionListener.SelectedActionName = Action1Name;
 
             bool called = false;
@@ -99,7 +194,20 @@ namespace Sticmac.InputActionListeners {
         }
 
         [Test]
-        public void TriggerAndReleaseSelectedActionShouldActivateCanceledCallback() {
+        public void TriggerAnotherActionShouldNotActivatePerformedCSharpEventCallback() {
+            _actionListener.SelectedActionName = Action1Name;
+
+            bool called = false;
+            _actionListener.Performed += () => called = true;
+
+            Set(_gamepad.leftStick, new Vector2(0.123f, 0.234f));
+
+            Assert.That(called, Is.False);
+        }
+
+        [Test]
+        public void TriggerAndReleaseSelectedActionShouldActivateCanceledUnityEventCallback() {
+            _actionListener.EventsActivationMode = AbstractInputActionListener.EventsMode.InvokeUnityEvents;
             _actionListener.SelectedActionName = Action1Name;
 
             bool called = false;
@@ -112,11 +220,68 @@ namespace Sticmac.InputActionListeners {
         }
 
         [Test]
-        public void TriggerAndReleaseAnotherActionShouldNotActivateCanceledCallback() {
+        public void TriggerAndReleaseSelectedActionShouldActivateCanceledCSharpEventCallback() {
+            _actionListener.EventsActivationMode = AbstractInputActionListener.EventsMode.InvokeCSharpEvents;
+            _actionListener.SelectedActionName = Action1Name;
+
+            bool called = false;
+            _actionListener.Canceled += () => called = true;
+
+            Press(_keyboard.spaceKey);
+            Release(_keyboard.spaceKey);
+
+            Assert.That(called, Is.True);
+        }
+
+        [Test]
+        public void TriggerAndReleaseSelectedActionShouldNotActivateCanceledUnityEventCallbackWhenWrongModeIsSelected() {
+            _actionListener.EventsActivationMode = AbstractInputActionListener.EventsMode.InvokeCSharpEvents;
             _actionListener.SelectedActionName = Action1Name;
 
             bool called = false;
             _actionListener.CanceledUnityEvent.AddListener(() => called = true);
+
+            Press(_keyboard.spaceKey);
+            Release(_keyboard.spaceKey);
+
+            Assert.That(called, Is.False);
+        }
+
+        [Test]
+        public void TriggerAndReleaseSelectedActionShouldNotActivateCanceledCSharpCallbackWhenWrongModeIsSelected() {
+            _actionListener.EventsActivationMode = AbstractInputActionListener.EventsMode.InvokeUnityEvents;
+            _actionListener.SelectedActionName = Action1Name;
+
+            bool called = false;
+            _actionListener.Canceled += () => called = true;
+
+            Press(_keyboard.spaceKey);
+            Release(_keyboard.spaceKey);
+
+            Assert.That(called, Is.False);
+        }
+
+        [Test]
+        public void TriggerAndReleaseAnotherActionShouldNotActivateCanceledUnityEventCallback() {
+            _actionListener.EventsActivationMode = AbstractInputActionListener.EventsMode.InvokeUnityEvents;
+            _actionListener.SelectedActionName = Action1Name;
+
+            bool called = false;
+            _actionListener.CanceledUnityEvent.AddListener(() => called = true);
+
+            Set(_gamepad.leftStick, new Vector2(0.123f, 0.234f));
+            Set(_gamepad.leftStick, new Vector2(0f, 0f));
+
+            Assert.That(called, Is.False);
+        }
+
+        [Test]
+        public void TriggerAndReleaseAnotherActionShouldNotActivateCanceledCSharpCallback() {
+            _actionListener.EventsActivationMode = AbstractInputActionListener.EventsMode.InvokeCSharpEvents;
+            _actionListener.SelectedActionName = Action1Name;
+
+            bool called = false;
+            _actionListener.Canceled += () => called = true;
 
             Set(_gamepad.leftStick, new Vector2(0.123f, 0.234f));
             Set(_gamepad.leftStick, new Vector2(0f, 0f));

@@ -44,7 +44,7 @@ namespace Sticmac.InputActionListeners {
         {
             if (_selectedActionName == context.action.name) {
                 var val = context.ReadValue<T>();
-                switch (_eventsMode) {
+                switch (EventsActivationMode) {
                     case EventsMode.InvokeUnityEvents:
                         if (context.started) {
                             StartedUnityEvent.Invoke(val);
