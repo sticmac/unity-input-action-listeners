@@ -75,9 +75,11 @@ namespace Sticmac.InputActionListeners {
         {
             base.Initialize(playerInput);
 
-            StartedUnityEvent = new U();
-            PerformedUnityEvent = new U();
-            CanceledUnityEvent = new U();
+            if (StartedUnityEvent == null || PerformedUnityEvent == null || CanceledUnityEvent == null) {
+                StartedUnityEvent = new U();
+                PerformedUnityEvent = new U();
+                CanceledUnityEvent = new U();
+            }
         }
     }
 }
