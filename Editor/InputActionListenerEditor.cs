@@ -22,6 +22,15 @@ namespace Sticmac.InputActionListeners {
 
         private string[] _actionsNames = null;
         private int _lastSelectedActionIndex = 0;
+        private PlayerInput _lastPi;
+
+        private void UpdateActionNames(PlayerInput playerInput) {
+            if (playerInput != null) {
+                _actionsNames = playerInput.actions.FindActionMap(playerInput.defaultActionMap, false).Select(a => a.name).ToArray();
+            } else {
+                _actionsNames = new string[]{};
+            }
+        }
 
         private void OnEnable() {
             _so = serializedObject;
@@ -35,12 +44,8 @@ namespace Sticmac.InputActionListeners {
             _performedEventProperty = _so.FindProperty("PerformedUnityEvent");
             _canceledEventProperty = _so.FindProperty("CanceledUnityEvent");
 
-            PlayerInput playerInput = _playerInputProperty.objectReferenceValue as PlayerInput;
-            if (playerInput != null) {
-                _actionsNames = playerInput.actions.FindActionMap(playerInput.defaultActionMap, false).Select(a => a.name).ToArray();
-            } else {
-                _actionsNames = new string[]{};
-            }
+            PlayerInput playerInput = _lastPi = _playerInputProperty.objectReferenceValue as PlayerInput;
+            UpdateActionNames(playerInput);
 
             // The last selected action index is updated on load
             // If the current selected action name isn't found, we want the index to be set at zero (so the first action is selected instead)
@@ -59,6 +64,10 @@ namespace Sticmac.InputActionListeners {
             }
 
             if (_playerInputProperty.objectReferenceValue != null) {
+                if (_lastPi != pi) {
+                    UpdateActionNames(pi);
+                    _lastPi = pi;
+                }
                 EditorGUILayout.Space(10);
 
                 // Selected action
