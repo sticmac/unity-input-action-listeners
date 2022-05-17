@@ -16,6 +16,12 @@ namespace Sticmac.InputActionListeners {
         }
 
         /// <summary>
+        /// Name of the selected action map
+        /// </summary>
+        [SerializeField] private string _selectedActionMapName = null;
+        public string SelectedActionMapName { get => _selectedActionMapName; set => _selectedActionMapName = value; }
+
+        /// <summary>
         /// Name of the selected action
         /// </summary>
         [SerializeField] protected string _selectedActionName = null;
